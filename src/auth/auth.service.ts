@@ -35,13 +35,22 @@ export class AuthService implements OnModuleInit{
     const {name, email, password} = signUpDto;
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    const user = await this.userModel.create({
+    let userWithSameEmail = await this.findUserWithEmail(email);
+
+    if(userWithSameEmail){
+      throw new UnauthorizedException('user already exist with this email');
+      return;
+    }
+
+    let user = await this.userModel.create({
       name,
       email,
       password : hashedPassword
     })
+    user = JSON.parse(JSON.stringify(user));
+    delete user.password;
     const token = this.jwtService.sign({id : user._id})
-    return {token};
+    return {...user, token};
   }
 
   async login(loginDto) : Promise<{user : User, token : string}> {
