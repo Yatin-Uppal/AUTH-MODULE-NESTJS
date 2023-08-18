@@ -3,7 +3,6 @@ import { InjectModel } from "@nestjs/mongoose";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy, ExtractJwt } from "passport-jwt";
 import { User } from "../auth/schemas/user.schema";
-import { Project } from '../project/schemas/project.schema';
 import {Model} from "mongoose";
 
 
